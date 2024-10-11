@@ -12,7 +12,7 @@ class StartViewController: UIViewController {
     private let logoImage = UIImageView()
     private let logoLabel = UILabel()
     private let logoDescriptionLabel = UILabel()
-    private let loginButton = UIButton()
+    private let loginButton = CustomButton()
     private let stackView = UIStackView()
     private let downLable = UILabel()
     private let createButton = UILabel()
@@ -77,10 +77,7 @@ class StartViewController: UIViewController {
         view.addSubview(loginButton)
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         
-        loginButton.setTitle("Войти по номеру телефона", for: .normal)
-        loginButton.setTitleColor(.white, for: .normal)
-        loginButton.backgroundColor = .systemBlue
-        loginButton.layer.cornerRadius = 56 / 2
+        loginButton.configure(with: "Войти по номеру телефона")
         
         NSLayoutConstraint.activate([
             

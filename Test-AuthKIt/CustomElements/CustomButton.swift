@@ -24,7 +24,12 @@ class CustomButton: UIButton {
         layer.cornerRadius = 56 / 2
         titleLabel?.font = .systemFont(ofSize: 16)
     }
-    func configure(with title: String) {
+    
+    func configure(with title: String, backgroundColor: UIColor? = nil) {
         setTitle(title, for: .normal)
+        
+        if let bgColor = backgroundColor {
+            self.backgroundColor = bgColor
+        }
     }
 }

@@ -25,6 +25,8 @@ class RegistrationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        setupNavBarTitle()
+        setupNavigationBar()
         setupLayout()
     }
     
@@ -37,6 +39,27 @@ class RegistrationViewController: UIViewController {
         setupInfoLabel()
         setupGetCodeButton()
     }
+    
+    private func setupNavBarTitle() {
+        self.title = "Войти"
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+    }
+    
+    private func setupNavigationBar() {
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        navigationItem.backBarButtonItem = backButton
+        
+        let customImage = UIImage(named: "arrow-left")?.withRenderingMode(.alwaysTemplate)
+        let customBackButton = UIBarButtonItem(image: customImage, style: .plain, target: self, action: #selector(backAction))
+        customBackButton.tintColor = .white
+        navigationItem.leftBarButtonItem = customBackButton
+    }
+    
+    @objc private func backAction() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     
     private func setupphoneLabel() {
         view.addSubview(phoneLabel)

@@ -163,6 +163,7 @@ class RegistrationViewController: UIViewController {
         getCodeButton.translatesAutoresizingMaskIntoConstraints = false
         
         getCodeButton.configure(with: "Получить код")
+        getCodeButton.addTarget(self, action: #selector(getCodeButtonTupped), for: .primaryActionTriggered)
         
         NSLayoutConstraint.activate([
             getCodeButton.topAnchor.constraint(equalTo: infoLabel.bottomAnchor, constant: 53),
@@ -171,6 +172,14 @@ class RegistrationViewController: UIViewController {
             getCodeButton.heightAnchor.constraint(equalToConstant: 56),
         ])
     }
+    
+    
+    @objc
+    private func getCodeButtonTupped() {
+        let secondVC = VerFirstViewController()
+        navigationController?.pushViewController(secondVC, animated: true)
+    }
+    
 }
 
 extension RegistrationViewController: UITableViewDelegate, UITableViewDataSource {
@@ -194,7 +203,7 @@ extension RegistrationViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-           return 70
+           return 50
        }
     
 }

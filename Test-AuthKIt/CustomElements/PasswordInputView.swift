@@ -17,6 +17,8 @@ class PasswordInputView: UIView {
     private let textFields: [UITextField]
     weak var delegate: PasswordInputViewDelegate?
     
+    private let textFieldHeight: CGFloat = 46
+    
     var didCompleteInput: ((String) -> Void)?
     
     init() {
@@ -54,6 +56,7 @@ class PasswordInputView: UIView {
         
         for textField in textFields {
             stackView.addArrangedSubview(textField)
+            textField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
         }
         
         addSubview(stackView)
@@ -63,7 +66,7 @@ class PasswordInputView: UIView {
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: 46),
+            stackView.heightAnchor.constraint(equalToConstant: textFieldHeight),
         ])
     }
     

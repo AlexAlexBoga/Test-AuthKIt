@@ -60,13 +60,9 @@ class RegistrationViewController: UIViewController {
         phoneFrame.translatesAutoresizingMaskIntoConstraints = false
         
         codeFrame.backgroundColor = .clear
-        codeFrame.layer.borderWidth = 0.6
-        codeFrame.layer.borderColor = UIColor.blue.cgColor
         codeFrame.layer.cornerRadius = 10
         
         phoneFrame.backgroundColor = .clear
-        phoneFrame.layer.borderWidth = 0.6
-        phoneFrame.layer.borderColor = UIColor.blue.cgColor
         phoneFrame.layer.cornerRadius = 10
         
         NSLayoutConstraint.activate([
@@ -82,6 +78,41 @@ class RegistrationViewController: UIViewController {
             phoneFrame.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -37),
             phoneFrame.heightAnchor.constraint(equalTo: codeFrame.heightAnchor),
         ])
+        
+        applyGradientBorder(to: codeFrame, gradientColors: GradientColors.gradient1, borderWidth: 2)
+        applyGradientBorder(to: phoneFrame, gradientColors: GradientColors.gradient1, borderWidth: 2)
+    }
+    
+    private func applyGradientBorder(to view: UIView, gradientColors: [CGColor], borderWidth: CGFloat) {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = gradientColors
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+        gradientLayer.frame = view.bounds
+        
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.lineWidth = borderWidth
+        shapeLayer.path = UIBezierPath(roundedRect: view.bounds, cornerRadius: 10).cgPath
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.strokeColor = UIColor.black.cgColor
+        
+        gradientLayer.mask = shapeLayer
+        
+        view.layer.addSublayer(gradientLayer)
+    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateGradientLayerFrames(for: codeFrame)
+        updateGradientLayerFrames(for: phoneFrame)
+    }
+
+    private func updateGradientLayerFrames(for view: UIView) {
+        guard let gradientLayer = view.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer else { return }
+        
+        gradientLayer.frame = view.bounds
+        if let shapeLayer = gradientLayer.mask as? CAShapeLayer {
+            shapeLayer.path = UIBezierPath(roundedRect: view.bounds, cornerRadius: 10).cgPath
+        }
     }
     
     private func setupCodeButton() {
@@ -97,7 +128,7 @@ class RegistrationViewController: UIViewController {
             codeButton.leadingAnchor.constraint(equalTo: codeFrame.leadingAnchor, constant: 10),
             codeButton.trailingAnchor.constraint(equalTo: codeFrame.trailingAnchor, constant: -30),
             codeButton.centerYAnchor.constraint(equalTo: codeFrame.centerYAnchor),
-            codeButton.heightAnchor.constraint(equalTo: codeFrame.heightAnchor)
+            codeButton.heightAnchor.constraint(equalTo: codeFrame.heightAnchor, constant: -4)
         ])
        
         triangleButton.setImage(triangleImage, for: .normal)
@@ -175,7 +206,6 @@ class RegistrationViewController: UIViewController {
         ])
     }
     
-    
     @objc
     private func getCodeButtonTupped() {
         let secondVC = VerFirstViewController()
@@ -204,6 +234,6 @@ extension RegistrationViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-           return 50
+           return 40
        }
 }

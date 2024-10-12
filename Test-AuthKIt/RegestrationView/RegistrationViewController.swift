@@ -24,7 +24,7 @@ class RegistrationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        view.backgroundColor = .backgroundApp
         setupNavBarTitle("Войти", textColor: .white)
         setupCustomBackButton()
         setupLayout()
@@ -44,7 +44,7 @@ class RegistrationViewController: UIViewController {
         view.addSubview(phoneLabel)
         phoneLabel.translatesAutoresizingMaskIntoConstraints = false
         phoneLabel.text = "Номер телефона"
-        phoneLabel.font = UIFont.systemFont(ofSize: 13)
+        phoneLabel.font = UIFont(name: "Urbanist-Regular", size: 13)
         phoneLabel.textColor = .white
         
         NSLayoutConstraint.activate([
@@ -151,7 +151,7 @@ class RegistrationViewController: UIViewController {
         view.addSubview(infoLabel)
         infoLabel.translatesAutoresizingMaskIntoConstraints = false
         infoLabel.text = "Код придет на ваш номер телефона"
-        infoLabel.font = UIFont.systemFont(ofSize: 13)
+        infoLabel.font = UIFont(name: "Urbanist-Light", size: 14)
         infoLabel.textColor = .white
         
         NSLayoutConstraint.activate([
@@ -164,7 +164,7 @@ class RegistrationViewController: UIViewController {
         view.addSubview(getCodeButton)
         getCodeButton.translatesAutoresizingMaskIntoConstraints = false
         
-        getCodeButton.configure(with: "Получить код")
+        getCodeButton.configure(with: "Получить код", gradientColors: GradientColors.gradient1)
         getCodeButton.addTarget(self, action: #selector(getCodeButtonTupped), for: .primaryActionTriggered)
         
         NSLayoutConstraint.activate([
@@ -181,7 +181,6 @@ class RegistrationViewController: UIViewController {
         let secondVC = VerFirstViewController()
         navigationController?.pushViewController(secondVC, animated: true)
     }
-    
 }
 
 extension RegistrationViewController: UITableViewDelegate, UITableViewDataSource {
@@ -207,5 +206,4 @@ extension RegistrationViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
            return 50
        }
-    
 }

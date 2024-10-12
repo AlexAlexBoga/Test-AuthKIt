@@ -27,16 +27,21 @@ class CustomView: UIView {
         firstLabel.text = firstText
         firstLabel.textColor = .white
         firstLabel.textAlignment = .center
+        firstLabel.font = UIFont(name: "SFProDisplay-Medium", size: 24)
         
         secondLabel.text = secondText
-        secondLabel.textColor = .lightGray
+        secondLabel.textColor = .grayApp
         secondLabel.textAlignment = .center
         secondLabel.numberOfLines = 0
         secondLabel.lineBreakMode = .byWordWrapping
+        secondLabel.font = UIFont(name: "SFProDisplay-Medium", size: 16)
         
         thirdLabel.text = thirdText
         thirdLabel.textColor = .white
         thirdLabel.textAlignment = .center
+        thirdLabel.numberOfLines = 0
+        thirdLabel.lineBreakMode = .byWordWrapping
+        thirdLabel.font = UIFont(name: "SFProDisplay-Medium", size: 16)
         
         addSubview(firstLabel)
         addSubview(secondLabel)

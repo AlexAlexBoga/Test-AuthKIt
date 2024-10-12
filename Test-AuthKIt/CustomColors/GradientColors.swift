@@ -5,8 +5,6 @@
 //  Created by Александр Богачев on 12.10.24.
 //
 
-import Foundation
-
 import UIKit
 
 struct GradientColors {

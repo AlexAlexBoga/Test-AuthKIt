@@ -19,7 +19,7 @@ class StartViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        view.backgroundColor = .backgroundApp
         setupLayout()
     }
     
@@ -37,13 +37,14 @@ class StartViewController: UIViewController {
         
         logoImage.image = .mainLogo
         logoImage.backgroundColor = .clear
+        logoImage.contentMode = .scaleAspectFill
         
         NSLayoutConstraint.activate([
             
             logoImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 265),
             logoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoImage.widthAnchor.constraint(equalToConstant: 79),
-            logoImage.heightAnchor.constraint(equalToConstant: 79),
+            logoImage.widthAnchor.constraint(equalToConstant: 100),
+            logoImage.heightAnchor.constraint(equalToConstant: 100),
         ])
     }
     
@@ -51,11 +52,11 @@ class StartViewController: UIViewController {
         view.addSubview(logoLabel)
         logoLabel.translatesAutoresizingMaskIntoConstraints = false
         logoLabel.text = "SIS"
-        logoLabel.font = UIFont.systemFont(ofSize: 34)
+        logoLabel.font = UIFont(name: "SFProDisplay-Medium", size: 34)
         logoLabel.textColor = .white
         
         NSLayoutConstraint.activate([
-            logoLabel.topAnchor.constraint(equalTo: logoImage.bottomAnchor, constant: 32),
+            logoLabel.topAnchor.constraint(equalTo: logoImage.bottomAnchor, constant: 31),
             logoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
     }
@@ -64,7 +65,7 @@ class StartViewController: UIViewController {
         view.addSubview(logoDescriptionLabel)
         logoDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         logoDescriptionLabel.text = "Выбери свою безопасность"
-        logoDescriptionLabel.font = UIFont.systemFont(ofSize: 17)
+        logoDescriptionLabel.font = UIFont(name: "SFProDisplay-Regular", size: 17)
         logoDescriptionLabel.textColor = .white
         
         NSLayoutConstraint.activate([
@@ -98,12 +99,12 @@ class StartViewController: UIViewController {
         
         downLable.text = "У вас нет аккаунта?"
         downLable.textColor = .white
-        downLable.font = .systemFont(ofSize: 14)
+        downLable.font = UIFont(name: "Urbanist-Light", size: 14)
         downLable.textAlignment = .center
         
         createButton.text = " Зарегистрируйтесь сейчас"
-        createButton.textColor = .systemBlue
-        createButton.font = .systemFont(ofSize: 14)
+        createButton.textColor = .textBlue
+        createButton.font = UIFont(name: "Urbanist-Light", size: 14)
         createButton.textAlignment = .center
         
         stackView.addArrangedSubview(downLable)

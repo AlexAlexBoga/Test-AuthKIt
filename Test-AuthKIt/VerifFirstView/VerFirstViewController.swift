@@ -12,13 +12,14 @@ class VerFirstViewController: UIViewController {
     private let passwordInputView = PasswordInputView()
     private let regButton = CustomButton()
     private let wrongLabel = UILabel()
+    private let underlineView = UIView()
     
     //    private let authService = AuthService()
     private let authService: AuthServiceProtocol = MockAuthService()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .backgroundApp
         customView = createCustomView()
         setupNavBarTitle("Войти", textColor: .white)
         setupCustomBackButton()
@@ -32,6 +33,7 @@ class VerFirstViewController: UIViewController {
         setupPasswordInputView()
         setupRegButton()
         setupwrongLabel()
+        setupUnderlineView()
     }
     
     private func keyBoardSetings() {
@@ -69,6 +71,7 @@ class VerFirstViewController: UIViewController {
         passwordInputView.didCompleteInput = { [weak self] code in
             self?.regButton.configure(with: "Зарегистироваться", gradientColors: GradientColors.gradient1)
             self?.wrongLabel.isHidden = true
+            self?.underlineView.isHidden = true
             self?.view.endEditing(true)
         }
     }
@@ -98,6 +101,19 @@ class VerFirstViewController: UIViewController {
         NSLayoutConstraint.activate([
             wrongLabel.topAnchor.constraint(equalTo: regButton.bottomAnchor, constant: 28),
             wrongLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        ])
+    }
+    
+    private func setupUnderlineView() {
+        view.addSubview(underlineView)
+        underlineView.translatesAutoresizingMaskIntoConstraints = false
+        underlineView.backgroundColor = .white
+        
+        NSLayoutConstraint.activate([
+            underlineView.topAnchor.constraint(equalTo: wrongLabel.bottomAnchor, constant: 1),
+            underlineView.centerXAnchor.constraint(equalTo: wrongLabel.centerXAnchor),
+            underlineView.widthAnchor.constraint(equalTo: wrongLabel.widthAnchor),
+            underlineView.heightAnchor.constraint(equalToConstant: 1),
         ])
     }
     
@@ -134,11 +150,13 @@ class VerFirstViewController: UIViewController {
     @objc
     private func keyboardWillShow(notification: NSNotification) {
         wrongLabel.isHidden = true
+        underlineView.isHidden = true
     }
     
     @objc
     private func keyboardWillHide(notification: NSNotification) {
         wrongLabel.isHidden = true
+        underlineView.isHidden = true
     }
 }
 
@@ -150,6 +168,7 @@ extension VerFirstViewController: PasswordInputViewDelegate {
         regButton.configure(with: "Зарегистироваться", gradientColors: GradientColors.gradient1)
         
         wrongLabel.isHidden = true
+        underlineView.isHidden = true
     }
 }
 

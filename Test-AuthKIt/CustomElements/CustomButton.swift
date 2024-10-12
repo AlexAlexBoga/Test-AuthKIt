@@ -23,7 +23,7 @@ class CustomButton: UIButton {
     private func setupButton() {
         setTitleColor(.white, for: .normal)
         layer.cornerRadius = 56 / 2
-        titleLabel?.font = .systemFont(ofSize: 16)
+        titleLabel?.font = UIFont(name: "Urbanist-Regular", size: 16)
         
         gradientLayer = CAGradientLayer()
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)

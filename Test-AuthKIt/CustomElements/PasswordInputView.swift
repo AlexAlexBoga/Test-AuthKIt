@@ -17,6 +17,8 @@ class PasswordInputView: UIView {
     private let textFields: [UITextField]
     weak var delegate: PasswordInputViewDelegate?
     
+    var didCompleteInput: ((String) -> Void)?
+    
     init() {
         textFields = (0..<6).map { _ in
             let textField = UITextField()
@@ -67,43 +69,27 @@ class PasswordInputView: UIView {
     
     private func setupTextFields() {
         for (index, textField) in textFields.enumerated() {
-            textField.delegate = self
             
-            textField.tag = index
             textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-            
-            textField.widthAnchor.constraint(equalTo: textField.heightAnchor).isActive = true
+            textField.tag = index
         }
     }
     
     @objc
     private func textFieldDidChange(_ textField: UITextField) {
-        if let text = textField.text, text.count == 1 {
-            let nextTag = textField.tag + 1
-            if nextTag < textFields.count {
-                textFields[nextTag].becomeFirstResponder()
-            } else {
-                textField.resignFirstResponder()
-                if allTextFieldsFilled() {
-                    delegate?.didCompletePasswordInput()
-                }
-            }
-        } else
-        if textField.text?.isEmpty == true {
-            let previousTag = textField.tag - 1
-            if previousTag >= 0 {
-                textFields[previousTag].becomeFirstResponder()
-            }
+        let tag = textField.tag
+        
+        if let text = textField.text, text.count == 1, tag < textFields.count - 1 {
+            textFields[tag + 1].becomeFirstResponder()
         }
+        
+        if textFields.allSatisfy({ $0.text?.isEmpty == false }) {
+            let code = getCode()
+            didCompleteInput?(code)
+        }
+        
     }
-    
-    private func allTextFieldsFilled() -> Bool {
-        return textFields.allSatisfy { $0.text?.count == 1 }
-    }
-}
-
-extension PasswordInputView: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        return string.count <= 1
+    func getCode() -> String {
+        return textFields.compactMap { $0.text }.joined()
     }
 }

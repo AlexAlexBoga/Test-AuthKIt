@@ -164,7 +164,7 @@ class RegistrationViewController: UIViewController {
         view.addSubview(getCodeButton)
         getCodeButton.translatesAutoresizingMaskIntoConstraints = false
         
-        getCodeButton.configure(with: "Получить код")
+        getCodeButton.configure(with: "Получить код", gradientColors: GradientColors.gradient1)
         getCodeButton.addTarget(self, action: #selector(getCodeButtonTupped), for: .primaryActionTriggered)
         
         NSLayoutConstraint.activate([

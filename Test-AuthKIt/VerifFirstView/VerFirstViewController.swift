@@ -67,7 +67,7 @@ class VerFirstViewController: UIViewController {
         ])
         
         passwordInputView.didCompleteInput = { [weak self] code in
-            self?.regButton.backgroundColor = .systemBlue
+            self?.regButton.configure(with: "Зарегистироваться", gradientColors: GradientColors.gradient1)
             self?.wrongLabel.isHidden = true
             self?.view.endEditing(true)
         }
@@ -77,7 +77,7 @@ class VerFirstViewController: UIViewController {
         view.addSubview(regButton)
         regButton.translatesAutoresizingMaskIntoConstraints = false
         
-        regButton.configure(with: "Зарегистироваться", backgroundColor: .lightGray)
+        regButton.configure(with: "Зарегистироваться", gradientColors: GradientColors.gradient2)
         regButton.addTarget(self, action: #selector(regButtonTupped), for: .primaryActionTriggered)
         
         NSLayoutConstraint.activate([
@@ -147,7 +147,7 @@ extension VerFirstViewController: PasswordInputViewDelegate {
     func didCompletePasswordInput() {
         view.endEditing(true)
         
-        regButton.configure(with: "Зарегистироваться", backgroundColor: .systemBlue)
+        regButton.configure(with: "Зарегистироваться", gradientColors: GradientColors.gradient1)
         
         wrongLabel.isHidden = true
     }

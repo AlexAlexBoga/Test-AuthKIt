@@ -77,7 +77,7 @@ class StartViewController: UIViewController {
         view.addSubview(loginButton)
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         
-        loginButton.configure(with: "Войти по номеру телефона")
+        loginButton.configure(with: "Войти по номеру телефона", gradientColors: GradientColors.gradient1)
         loginButton.addTarget(self, action: #selector(loginButtonTupped), for: .primaryActionTriggered)
         
         NSLayoutConstraint.activate([

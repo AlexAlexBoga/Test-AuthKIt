@@ -9,6 +9,8 @@ import UIKit
 
 class CustomButton: UIButton {
     
+    private var gradientLayer: CAGradientLayer!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupButton()
@@ -20,16 +22,30 @@ class CustomButton: UIButton {
     
     private func setupButton() {
         setTitleColor(.white, for: .normal)
-        backgroundColor = .systemBlue
         layer.cornerRadius = 56 / 2
         titleLabel?.font = .systemFont(ofSize: 16)
+        
+        gradientLayer = CAGradientLayer()
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
+        layer.insertSublayer(gradientLayer, at: 0)
+        
+        let maskLayer = CAShapeLayer()
+        maskLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius).cgPath
+        gradientLayer.mask = maskLayer
     }
     
-    func configure(with title: String, backgroundColor: UIColor? = nil) {
-        setTitle(title, for: .normal)
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = bounds
         
-        if let bgColor = backgroundColor {
-            self.backgroundColor = bgColor
-        }
+        let maskLayer = CAShapeLayer()
+        maskLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius).cgPath
+        gradientLayer.mask = maskLayer
+    }
+    
+    func configure(with title: String, gradientColors: [CGColor]) {
+        setTitle(title, for: .normal)
+        gradientLayer.colors = gradientColors
     }
 }

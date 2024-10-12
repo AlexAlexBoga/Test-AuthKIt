@@ -7,11 +7,14 @@
 import UIKit
 
 class VerFirstViewController: UIViewController {
-
+    
     private var customView: CustomView?
     private let passwordInputView = PasswordInputView()
     private let regButton = CustomButton()
     private let wrongLabel = UILabel()
+    
+    //    private let authService = AuthService()
+    private let authService: AuthServiceProtocol = MockAuthService()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,8 +24,8 @@ class VerFirstViewController: UIViewController {
         keyBoardSetings()
         setupLayout()
         passwordInputView.delegate = self
-      }
-
+    }
+    
     private func setupLayout() {
         setupCustomView()
         setupPasswordInputView()
@@ -61,6 +64,12 @@ class VerFirstViewController: UIViewController {
             passwordInputView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -37),
             passwordInputView.heightAnchor.constraint(equalToConstant: 50),
         ])
+        
+        passwordInputView.didCompleteInput = { [weak self] code in
+            self?.regButton.backgroundColor = .systemBlue
+            self?.wrongLabel.isHidden = true
+            self?.view.endEditing(true)
+        }
     }
     
     private func setupRegButton() {
@@ -93,9 +102,24 @@ class VerFirstViewController: UIViewController {
     
     @objc
     private func regButtonTupped() {
-//        let secondVC = VerFirstViewController()
-//        navigationController?.pushViewController(secondVC, animated: true)
+        let enteredCode = passwordInputView.getCode()
+        
+        authService.login(with: enteredCode) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self?.navigateToMainApp()
+                case .failure(let error):
+                    print("Ошибка авторизации: \(error.localizedDescription)")
+                }
+            }
+        }
+        
         print("regButtonTupped pressed")
+    }
+    
+    private func navigateToMainApp() {
+        print("navigateToMainApp")
     }
     
     private func createCustomView() -> CustomView {
@@ -113,12 +137,12 @@ class VerFirstViewController: UIViewController {
     
     @objc
     private func keyboardWillHide(notification: NSNotification) {
-        wrongLabel.isHidden = false
+        wrongLabel.isHidden = true
     }
 }
 
 extension VerFirstViewController: PasswordInputViewDelegate {
-   
+    
     func didCompletePasswordInput() {
         view.endEditing(true)
         
@@ -126,5 +150,5 @@ extension VerFirstViewController: PasswordInputViewDelegate {
         
         wrongLabel.isHidden = true
     }
-    
 }
+

@@ -18,7 +18,9 @@ class VerFirstViewController: UIViewController {
         customView = createCustomView()
         setupNavBarTitle("Войти", textColor: .white)
         setupCustomBackButton()
+        keyBoardSetings()
         setupLayout()
+        passwordInputView.delegate = self
       }
 
     private func setupLayout() {
@@ -26,6 +28,15 @@ class VerFirstViewController: UIViewController {
         setupPasswordInputView()
         setupRegButton()
         setupwrongLabel()
+    }
+    
+    private func keyBoardSetings() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func setupCustomView() {
@@ -56,7 +67,7 @@ class VerFirstViewController: UIViewController {
         view.addSubview(regButton)
         regButton.translatesAutoresizingMaskIntoConstraints = false
         
-        regButton.configure(with: "Получить код", backgroundColor: .lightGray)
+        regButton.configure(with: "Зарегистироваться", backgroundColor: .lightGray)
         regButton.addTarget(self, action: #selector(regButtonTupped), for: .primaryActionTriggered)
         
         NSLayoutConstraint.activate([
@@ -94,4 +105,26 @@ class VerFirstViewController: UIViewController {
             thirdText: "Запросить код можно \n через 05:00"
         )
     }
+    
+    @objc
+    private func keyboardWillShow(notification: NSNotification) {
+        wrongLabel.isHidden = true
+    }
+    
+    @objc
+    private func keyboardWillHide(notification: NSNotification) {
+        wrongLabel.isHidden = false
+    }
+}
+
+extension VerFirstViewController: PasswordInputViewDelegate {
+   
+    func didCompletePasswordInput() {
+        view.endEditing(true)
+        
+        regButton.configure(with: "Зарегистироваться", backgroundColor: .systemBlue)
+        
+        wrongLabel.isHidden = true
+    }
+    
 }

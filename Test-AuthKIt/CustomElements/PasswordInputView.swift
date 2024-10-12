@@ -7,14 +7,21 @@
 
 import UIKit
 
+protocol PasswordInputViewDelegate: AnyObject {
+    func didCompletePasswordInput()
+}
+
 class PasswordInputView: UIView {
     
     private let stackView = UIStackView()
     private let textFields: [UITextField]
+    weak var delegate: PasswordInputViewDelegate?
     
     init() {
         textFields = (0..<6).map { _ in
             let textField = UITextField()
+            textField.keyboardType = .numberPad
+            textField.keyboardAppearance = .dark
             textField.borderStyle = .roundedRect
             textField.textAlignment = .center
             textField.font = UIFont.systemFont(ofSize: 22)
@@ -68,20 +75,30 @@ class PasswordInputView: UIView {
             textField.widthAnchor.constraint(equalTo: textField.heightAnchor).isActive = true
         }
     }
-        
+    
     @objc
     private func textFieldDidChange(_ textField: UITextField) {
         if let text = textField.text, text.count == 1 {
             let nextTag = textField.tag + 1
             if nextTag < textFields.count {
                 textFields[nextTag].becomeFirstResponder()
+            } else {
+                textField.resignFirstResponder()
+                if allTextFieldsFilled() {
+                    delegate?.didCompletePasswordInput()
+                }
             }
-        } else if textField.text?.isEmpty == true {
+        } else
+        if textField.text?.isEmpty == true {
             let previousTag = textField.tag - 1
             if previousTag >= 0 {
                 textFields[previousTag].becomeFirstResponder()
             }
         }
+    }
+    
+    private func allTextFieldsFilled() -> Bool {
+        return textFields.allSatisfy { $0.text?.count == 1 }
     }
 }
 

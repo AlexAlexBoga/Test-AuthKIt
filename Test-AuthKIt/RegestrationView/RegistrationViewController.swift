@@ -136,6 +136,8 @@ class RegistrationViewController: UIViewController {
         phoneTextField.placeholder = "Ваш телефон"
         phoneTextField.textColor = .white
         phoneTextField.borderStyle = .none
+        phoneTextField.keyboardType = .numberPad
+        phoneTextField.keyboardAppearance = .dark
         
         NSLayoutConstraint.activate([
             phoneTextField.leadingAnchor.constraint(equalTo: phoneFrame.leadingAnchor, constant: 34),

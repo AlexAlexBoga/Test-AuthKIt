@@ -173,7 +173,7 @@ class RegistrationViewController: UIViewController {
         NSLayoutConstraint.activate([
             phoneTextField.leadingAnchor.constraint(equalTo: phoneFrame.leadingAnchor, constant: 34),
             phoneTextField.trailingAnchor.constraint(equalTo: phoneFrame.trailingAnchor),
-            phoneTextField.topAnchor.constraint(equalTo: phoneFrame.topAnchor, constant: -11),
+            phoneTextField.topAnchor.constraint(equalTo: phoneFrame.topAnchor),
             phoneTextField.bottomAnchor.constraint(equalTo: phoneFrame.bottomAnchor)
         ])
     }

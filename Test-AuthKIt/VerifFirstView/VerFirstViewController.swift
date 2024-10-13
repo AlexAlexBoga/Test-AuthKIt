@@ -60,6 +60,7 @@ class VerFirstViewController: UIViewController {
     private func setupPasswordInputView() {
         view.addSubview(passwordInputView)
         passwordInputView.translatesAutoresizingMaskIntoConstraints = false
+        passwordInputView.configure(gradientColors: GradientColors.gradient1)
         
         NSLayoutConstraint.activate([
             passwordInputView.topAnchor.constraint(equalTo: customView!.bottomAnchor, constant: 30),

@@ -13,7 +13,10 @@ protocol PasswordInputViewDelegate: AnyObject {
 
 class PasswordInputView: UIView {
     
+    private var gradientLayer: CAGradientLayer!
+    
     private let stackView = UIStackView()
+    private let textFieldContainers: [UIView]
     private let textFields: [UITextField]
     weak var delegate: PasswordInputViewDelegate?
     
@@ -22,6 +25,7 @@ class PasswordInputView: UIView {
     var didCompleteInput: ((String) -> Void)?
     
     init() {
+        textFieldContainers = (0..<6).map { _ in UIView() }
         textFields = (0..<6).map { _ in
             let textField = UITextField()
             textField.keyboardType = .numberPad
@@ -30,10 +34,7 @@ class PasswordInputView: UIView {
             textField.textAlignment = .center
             textField.font = UIFont.systemFont(ofSize: 22)
             textField.textColor = .white
-            textField.backgroundColor = .black
-            textField.layer.borderColor = UIColor.blue.cgColor
-            textField.layer.borderWidth = 0.9
-            textField.layer.cornerRadius = 3.7
+            textField.backgroundColor = .backgroundApp
             textField.translatesAutoresizingMaskIntoConstraints = false
             
             return textField
@@ -41,6 +42,7 @@ class PasswordInputView: UIView {
         
         super.init(frame: .zero)
         setupView()
+        setupContainers()
         setupTextFields()
     }
     
@@ -49,32 +51,71 @@ class PasswordInputView: UIView {
     }
     
     private func setupView() {
+        addSubview(stackView)
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.distribution = .fillEqually
         stackView.spacing = 10
         
-        for textField in textFields {
-            stackView.addArrangedSubview(textField)
-            textField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
-        }
-        
-        addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.heightAnchor.constraint(equalToConstant: textFieldHeight),
+            stackView.heightAnchor.constraint(equalToConstant: textFieldHeight)
         ])
     }
     
-    private func setupTextFields() {
-        for (index, textField) in textFields.enumerated() {
+    private func setupContainers() {
+        for containerView in textFieldContainers {
+            stackView.addArrangedSubview(containerView)
+            containerView.translatesAutoresizingMaskIntoConstraints = false
+            containerView.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
             
-            textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-            textField.tag = index
+            containerView.layer.cornerRadius = 3.7
+            containerView.layer.masksToBounds = true
+            
+            gradientLayer = CAGradientLayer()
+            gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
+            gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
+            layer.insertSublayer(gradientLayer, at: 0)
+            
+            containerView.layer.insertSublayer(gradientLayer, at: 0)
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        for containerView in textFieldContainers {
+            if let gradientLayer = containerView.layer.sublayers?.first as? CAGradientLayer {
+                gradientLayer.frame = bounds
+            }
+        }
+    }
+
+    func configure(gradientColors: [CGColor]) {
+        for containerView in textFieldContainers {
+            if let gradientLayer = containerView.layer.sublayers?.first as? CAGradientLayer {
+                gradientLayer.colors = gradientColors
+            }
+        }
+    }
+    
+    private func setupTextFields() {
+        for (index, containerView) in textFieldContainers.enumerated() {
+            containerView.addSubview(textFields[index])
+            
+            NSLayoutConstraint.activate([
+                textFields[index].leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 1),
+                textFields[index].trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -1),
+                textFields[index].topAnchor.constraint(equalTo: containerView.topAnchor, constant: 1),
+                textFields[index].bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -1)
+            ])
+            
+            textFields[index].addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+            textFields[index].tag = index
         }
     }
     
@@ -90,8 +131,8 @@ class PasswordInputView: UIView {
             let code = getCode()
             didCompleteInput?(code)
         }
-        
     }
+    
     func getCode() -> String {
         return textFields.compactMap { $0.text }.joined()
     }

@@ -14,6 +14,7 @@ protocol PasswordInputViewDelegate: AnyObject {
 class PasswordInputView: UIView {
     
     private let stackView = UIStackView()
+    private let textFieldContainers: [UIView]
     private let textFields: [UITextField]
     weak var delegate: PasswordInputViewDelegate?
     
@@ -22,6 +23,7 @@ class PasswordInputView: UIView {
     var didCompleteInput: ((String) -> Void)?
     
     init() {
+        textFieldContainers = (0..<6).map { _ in UIView() }
         textFields = (0..<6).map { _ in
             let textField = UITextField()
             textField.keyboardType = .numberPad
@@ -30,10 +32,7 @@ class PasswordInputView: UIView {
             textField.textAlignment = .center
             textField.font = UIFont.systemFont(ofSize: 22)
             textField.textColor = .white
-            textField.backgroundColor = .black
-            textField.layer.borderColor = UIColor.blue.cgColor
-            textField.layer.borderWidth = 0.9
-            textField.layer.cornerRadius = 3.7
+            textField.backgroundColor = .backgroundApp
             textField.translatesAutoresizingMaskIntoConstraints = false
             
             return textField
@@ -54,9 +53,22 @@ class PasswordInputView: UIView {
         stackView.distribution = .fillEqually
         stackView.spacing = 10
         
-        for textField in textFields {
-            stackView.addArrangedSubview(textField)
-            textField.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+        for (index, containerView) in textFieldContainers.enumerated() {
+            stackView.addArrangedSubview(containerView)
+            containerView.translatesAutoresizingMaskIntoConstraints = false
+            containerView.heightAnchor.constraint(equalToConstant: textFieldHeight).isActive = true
+            
+            containerView.addSubview(textFields[index])
+            
+            containerView.backgroundColor = .blue
+            containerView.layer.cornerRadius = 3.7
+            
+            NSLayoutConstraint.activate([
+                textFields[index].leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 1),
+                textFields[index].trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -1),
+                textFields[index].topAnchor.constraint(equalTo: containerView.topAnchor, constant: 1),
+                textFields[index].bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -1)
+            ])
         }
         
         addSubview(stackView)

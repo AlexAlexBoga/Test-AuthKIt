@@ -12,7 +12,7 @@ protocol PasswordInputViewDelegate: AnyObject {
 }
 
 class PasswordInputView: UIView {
-    
+   
     private let stackView = UIStackView()
     private let textFieldContainers: [UIView]
     private let textFields: [UITextField]
@@ -46,7 +46,7 @@ class PasswordInputView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+   
     private func setupView() {
         stackView.axis = .horizontal
         stackView.alignment = .center
@@ -89,7 +89,7 @@ class PasswordInputView: UIView {
             textField.tag = index
         }
     }
-    
+
     @objc
     private func textFieldDidChange(_ textField: UITextField) {
         let tag = textField.tag

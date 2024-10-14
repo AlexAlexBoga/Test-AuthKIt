@@ -31,21 +31,31 @@ class AuthService: AuthServiceProtocol {
             guard let self = self else { return }
             
             if let error = error {
-                completion(.failure(error))
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
                 return
             }
+            
             guard let data = data else {
                 let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"])
-                completion(.failure(error))
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
                 return
             }
+            
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                let token = json["token"] as? String {
                 self.saveToken(token)
-                completion(.success(()))
+                DispatchQueue.main.async {
+                    completion(.success(()))
+                }
             } else {
                 let error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid credentials"])
-                completion(.failure(error))
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
             }
         }
         
